@@ -1,0 +1,37 @@
+---
+jobs:
+- name: deploy-bots-stage
+  serial: true
+  plan:
+  - aggregate:
+    - get: git-sandbox-bot-stage
+      trigger: true
+  - aggregate:
+    - put: deploy-bot-stage
+      params:
+        manifest: git-sandbox-bot-stage/manifest-staging.yml
+        path: git-sandbox-bot-stage
+        current_app_name: sandbox-bot-staging
+        environment_variables:
+          CLIENT_ID: {{client-id}}
+          CLIENT_SECRET: {{client-secret}}
+          UAA_URL: {{uaa-url}}
+          SLACK_HOOK: {{slack-webhook-url}}
+
+
+resources:
+- name: git-sandbox-bot-stage
+  type: git
+  source:
+    uri: https://github.com/18f/cg-sandbox-bot
+    branch: staging
+
+- name: deploy-bot-stage
+  type: cf
+  source:
+    api: https://api.green.18f.gov
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: false
