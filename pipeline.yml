@@ -17,6 +17,7 @@ jobs:
           CLIENT_SECRET: {{client-secret}}
           UAA_URL: {{uaa-url}}
           SLACK_HOOK: {{slack-webhook-url}}
+          DOMAINS: {{domains}}
 
 
 resources:
