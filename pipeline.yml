@@ -14,8 +14,8 @@ jobs:
         current_app_name: sandbox-bot-staging
         environment_variables:
           CLIENT_ID: {{client-id}}
-          CLIENT_SECRET: {{client-secret}}
-          UAA_URL: {{uaa-url}}
+          CLIENT_SECRET: {{client-secret-staging}}
+          UAA_URL: {{uaa-url-staging}}
           SLACK_HOOK: {{slack-webhook-url}}
           DOMAINS: {{domains}}
 
