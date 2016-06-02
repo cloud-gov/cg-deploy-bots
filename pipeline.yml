@@ -1,4 +1,21 @@
 ---
+resources:
+- name: git-sandbox-bot-stage
+  type: git
+  source:
+    uri: https://github.com/18f/cg-sandbox-bot
+    branch: staging
+
+- name: deploy-bot-stage
+  type: cf
+  source:
+    api: https://api.green.18f.gov
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: false
+
 jobs:
 - name: deploy-bots-stage
   serial: true
@@ -17,22 +34,3 @@ jobs:
           CLIENT_SECRET: {{client-secret-staging}}
           UAA_URL: {{uaa-url-staging}}
           SLACK_HOOK: {{slack-webhook-url}}
-          DOMAINS: {{domains}}
-
-
-resources:
-- name: git-sandbox-bot-stage
-  type: git
-  source:
-    uri: https://github.com/18f/cg-sandbox-bot
-    branch: staging
-
-- name: deploy-bot-stage
-  type: cf
-  source:
-    api: https://api.green.18f.gov
-    username: {{cf-username}}
-    password: {{cf-password}}
-    organization: {{cf-organization}}
-    space: {{cf-space}}
-    skip_cert_check: false
