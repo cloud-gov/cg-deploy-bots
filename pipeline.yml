@@ -15,8 +15,8 @@ resources:
   type: cf
   source:
     api: https://api.green.18f.gov
-    username: {{cf-username-staging}}
-    password: {{cf-password-staging}}
+    username: {{cf-username}}
+    password: {{cf-password}}
     organization: {{cf-organization}}
     space: {{cf-space}}
     skip_cert_check: false
@@ -24,8 +24,8 @@ resources:
   type: cf
   source:
     api: https://api.cloud.gov
-    username: {{cf-username-production}}
-    password: {{cf-password-production}}
+    username: {{cf-username}}
+    password: {{cf-password}}
     organization: {{cf-organization}}
     space: {{cf-space}}
     skip_cert_check: false
