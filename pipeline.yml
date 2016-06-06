@@ -64,5 +64,5 @@ jobs:
         environment_variables:
           CLIENT_ID: {{client-id}}
           CLIENT_SECRET: {{client-secret-production}}
-          UAA_URL: {{uaa-url-prodution}}
+          UAA_URL: {{uaa-url-production}}
           SLACK_HOOK: {{slack-webhook-url}}
