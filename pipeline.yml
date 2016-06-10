@@ -14,7 +14,7 @@ resources:
 - name: deploy-bot-stage
   type: cf
   source:
-    api: https://api.green.18f.gov
+    api: https://api.fr-stage.18f.gov
     username: {{cf-username}}
     password: {{cf-password}}
     organization: {{cf-organization}}
@@ -23,7 +23,7 @@ resources:
 - name: deploy-bot-prod
   type: cf
   source:
-    api: https://api.cloud.gov
+    api: https://api.fr.cloud.gov
     username: {{cf-username}}
     password: {{cf-password}}
     organization: {{cf-organization}}
