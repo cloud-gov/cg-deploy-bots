@@ -14,7 +14,7 @@ resources:
 - name: deploy-bot-stage
   type: cf
   source:
-    api: https://api.fr-stage.18f.gov
+    api: https://api.fr-stage.cloud.gov
     username: {{cf-username}}
     password: {{cf-password}}
     organization: {{cf-organization}}
