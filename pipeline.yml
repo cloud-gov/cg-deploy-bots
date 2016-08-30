@@ -10,8 +10,18 @@ resources:
   source:
     uri: https://github.com/18f/cg-sandbox-bot
     branch: master
+- name: git-migration-bot-stage
+  type: git
+  source:
+    uri: https://github.com/18f/cg-migration-bot
+    branch: staging
+- name: git-migration-bot-prod
+  type: git
+  source:
+    uri: https://github.com/18f/cg-migration-bot
+    branch: master
 
-- name: deploy-bot-stage
+- name: sandbox-bot-stage-deployment
   type: cf
   source:
     api: {{cf-api-endpoint-staging}}
@@ -20,7 +30,25 @@ resources:
     organization: {{cf-organization}}
     space: {{cf-space}}
     skip_cert_check: false
-- name: deploy-bot-prod
+- name: sandbox-bot-prod-deployment
+  type: cf
+  source:
+    api: {{cf-api-endpoint-production}}
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: false
+- name: migration-bot-stage-deployment
+  type: cf
+  source:
+    api: {{cf-api-endpoint-staging}}
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: false
+- name: migration-bot-prod-deployment
   type: cf
   source:
     api: {{cf-api-endpoint-production}}
@@ -30,16 +58,15 @@ resources:
     space: {{cf-space}}
     skip_cert_check: false
 
-
 jobs:
-- name: deploy-bots-stage
+- name: deploy-sandbox-bot-stage
   serial: true
   plan:
   - aggregate:
     - get: git-sandbox-bot-stage
       trigger: true
   - aggregate:
-    - put: deploy-bot-stage
+    - put: sandbox-bot-stage-deployment
       params:
         manifest: git-sandbox-bot-stage/manifest-staging.yml
         path: git-sandbox-bot-stage
@@ -50,14 +77,17 @@ jobs:
           CLIENT_SECRET: {{client-secret-staging}}
           UAA_URL: {{uaa-url-staging}}
           SLACK_HOOK: {{slack-webhook-url}}
-- name: deploy-bots-prod
+
+- name: deploy-sandbox-bot-prod
   serial: true
   plan:
   - aggregate:
     - get: git-sandbox-bot-prod
       trigger: true
+    - get: sandbox-bot-stage-deployment
+      passed: [deploy-sandbox-bot-stage]
   - aggregate:
-    - put: deploy-bot-prod
+    - put: sandbox-bot-prod-deployment
       params:
         manifest: git-sandbox-bot-prod/manifest.yml
         path: git-sandbox-bot-prod
@@ -68,3 +98,25 @@ jobs:
           CLIENT_SECRET: {{client-secret-production}}
           UAA_URL: {{uaa-url-production}}
           SLACK_HOOK: {{slack-webhook-url}}
+
+- name: deploy-migration-bot-stage
+  serial: true
+  plan:
+  - aggregate:
+    - get: git-migration-bot-stage
+      trigger: true
+  - aggregate:
+    - put: migration-bot-stage-deployment
+      params:
+        manifest: git-migration-bot-stage/manifest.yml
+        path: git-migration-bot-stage
+        current_app_name: migration-bot
+        environment_variables:
+          SOURCE_CF_API_URL: {{source-cf-api-url-staging}}
+          SOURCE_UAA_URL: {{source-uaa-url-staging}}
+          SOURCE_CLIENT_ID: {{client-id}}
+          SOURCE_CLIENT_SECRET: {{source-client-secret-staging}}
+          DESTINATION_CF_API_URL: {{destination-cf-api-url-staging}}
+          DESTINATION_UAA_URL: {{destination-uaa-url-staging}}
+          DESTINATION_CLIENT_ID: {{client-id}}
+          DESTINATION_CLIENT_SECRET: {{destination-client-secret-staging}}
